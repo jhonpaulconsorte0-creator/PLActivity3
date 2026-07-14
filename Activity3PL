@@ -1,0 +1,74 @@
+import java.util.Scanner;
+
+public class TrafficStudy {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of vehicles observed: ");
+        int n = Integer.parseInt(sc.nextLine().trim());
+
+        int[] peopleTransported = new int[n];
+        int[] maxCapacity = new int[n];
+
+        // Collect data for each vehicle
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nVehicle " + (i + 1) + ":");
+            System.out.print("  Number of People Transported: ");
+            peopleTransported[i] = Integer.parseInt(sc.nextLine().trim());
+            System.out.print("  Maximum Capacity of Vehicle: ");
+            maxCapacity[i] = Integer.parseInt(sc.nextLine().trim());
+        }
+
+        // index 1-6 used directly, index 7 represents "more than 6"
+        int[] countByPeople = new int[8];
+        // index 0: 0-20%, 1: 20-40%, 2: 40-60%, 3: 60-80%, 4: 80-100%
+        int[] efficiencyGroups = new int[5];
+
+        for (int i = 0; i < n; i++) {
+            int people = peopleTransported[i];
+            int capacity = maxCapacity[i];
+
+            // a. Count vehicles by number of people transported
+            if (people >= 1 && people <= 6) {
+                countByPeople[people]++;
+            } else if (people > 6) {
+                countByPeople[7]++;
+            }
+
+            // b. Compute transportation efficiency
+            double efficiency = ((double) people / capacity) * 100;
+
+            if (efficiency >= 0 && efficiency < 20) {
+                efficiencyGroups[0]++;
+            } else if (efficiency >= 20 && efficiency < 40) {
+                efficiencyGroups[1]++;
+            } else if (efficiency >= 40 && efficiency < 60) {
+                efficiencyGroups[2]++;
+            } else if (efficiency >= 60 && efficiency < 80) {
+                efficiencyGroups[3]++;
+            } else if (efficiency >= 80 && efficiency <= 100) {
+                efficiencyGroups[4]++;
+            }
+        }
+
+        // Report A: Number of vehicles transporting X people
+        System.out.println("\n=== REPORT A: Number of Vehicles Transporting ===");
+        System.out.printf("%-30s %-10s%n", "Number of People Transported", "Number of Vehicles");
+        for (int p = 1; p <= 6; p++) {
+            System.out.printf("%-30d %-10d%n", p, countByPeople[p]);
+        }
+        System.out.printf("%-30s %-10d%n", "> 6", countByPeople[7]);
+
+        // Report B: Transportation efficiency groups
+        System.out.println("\n=== REPORT B: Transportation Efficiency ===");
+        System.out.printf("%-25s %-10s%n", "Transportation Efficiency", "Count");
+        System.out.printf("%-25s %-10d%n", "0 - 20", efficiencyGroups[0]);
+        System.out.printf("%-25s %-10d%n", "20 - 40", efficiencyGroups[1]);
+        System.out.printf("%-25s %-10d%n", "40 - 60", efficiencyGroups[2]);
+        System.out.printf("%-25s %-10d%n", "60 - 80", efficiencyGroups[3]);
+        System.out.printf("%-25s %-10d%n", "80 - 100", efficiencyGroups[4]);
+
+        sc.close();
+    }
+}
